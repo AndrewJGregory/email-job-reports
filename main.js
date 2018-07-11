@@ -37,10 +37,10 @@ async function writeIds(page) {
 async function login(page) {
   await page.goto("https://progress.appacademy.io/instructors/sign_in");
   await page.click("#instructor_email");
-  await page.keyboard.type(CREDS["email"]);
+  await page.keyboard.type(CREDS["jobberWocky"]["email"]);
 
   await page.click("#instructor_password");
-  await page.keyboard.type(CREDS["password"]);
+  await page.keyboard.type(CREDS["jobberWocky"]["password"]);
 
   await Promise.all([page.waitForNavigation(), page.click("button")]);
 }
