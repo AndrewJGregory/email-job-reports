@@ -20,14 +20,7 @@ async function main() {
     console.log(`numJobsApplied: ${numJobsApplied}`);
     STUDENTS[i]["jobsApplied"] = numJobsApplied;
   }
-}
-
-function sendEmails() {
-  const transporter = openEmailConnection();
-  for (let i = 0; i < STUDENTS.length; i++) {
-    const { name, jobsApplied } = STUDENTS[i];
-    sendEmail(STUDENTS, transporter);
-  }
+  sendEmail(STUDENTS, openEmailConnection());
 }
 
 async function writeIds(page) {
