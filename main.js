@@ -7,9 +7,17 @@ async function main() {
   let page = await browser.newPage();
   await page.setViewport({ width: 1200, height: 1000 });
   await login(page);
-  await page.goto("https://progress.appacademy.io/jobberwocky");
-  await writeIds(page);
-  writeToFile(STUDENTS);
+  for (let i = 0; i < STUDENTS.length; i++) {
+    const id = STUDENTS[i]["id"];
+    const url = `https://progress.appacademy.io/jobberwocky/students/${id}`;
+    await page.goto(url);
+    await page.waitForSelector(".student-show-apps");
+    const numJobsApplied = await page.$$eval(
+      ".student-show-apps",
+      figures => figures[0].children[0].innerText.match(/\d+/)[0]
+    );
+    console.log(`numJobsApplied: ${numJobsApplied}`);
+  }
 }
 
 async function writeIds(page) {
