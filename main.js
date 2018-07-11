@@ -1,6 +1,7 @@
 const { CREDS, STUDENTS } = require("./creds");
 const puppeteer = require("puppeteer");
 const fs = require("fs");
+const { openEmailConnection, sendEmail } = require("./mail");
 
 async function main() {
   let browser = await puppeteer.launch({ headless: false, devTools: true });
@@ -17,6 +18,15 @@ async function main() {
       figures => figures[0].children[0].innerText.match(/\d+/)[0]
     );
     console.log(`numJobsApplied: ${numJobsApplied}`);
+    STUDENTS[i]["jobsApplied"] = numJobsApplied;
+  }
+}
+
+function sendEmails() {
+  const transporter = openEmailConnection();
+  for (let i = 0; i < STUDENTS.length; i++) {
+    const { name, jobsApplied } = STUDENTS[i];
+    sendEmail(STUDENTS, transporter);
   }
 }
 
@@ -46,7 +56,7 @@ async function login(page) {
 }
 
 function writeToFile(obj) {
-  fs.writeFile("./studentsWithIds.js", JSON.stringify(obj), function(err) {
+  fs.writeFile("./writtenFile.js", JSON.stringify(obj), function(err) {
     if (err) console.log(err);
   });
 }
