@@ -31,7 +31,7 @@ const makeTable = (students, careerCoach) => {
     rows = rows.concat(row).concat("</tr>");
   });
 
-  return `<table>
+  return `<table style='text-align: center'>
   <thead>
   <tr>
   <th colspan='2'>${careerCoach}'s Job Seeker Report for 7/11/2018</th>
