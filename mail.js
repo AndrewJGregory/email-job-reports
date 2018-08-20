@@ -11,7 +11,7 @@ const sendEmail = (students, transporter) => {
     to: `${
       CREDS["email"]["address"]
     }, dcatalano@appacademy.io, jfehrman@appacademy.io`,
-    subject: "TEST Job Seeker Report",
+    subject: "Job Seeker Report",
     html: `${joeyTable}<br></br>${dannyTable}<br></br>${andrewTable}`
   };
 
