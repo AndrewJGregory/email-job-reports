@@ -25,14 +25,21 @@ async function main() {
 
 async function writeIds(page) {
   let id;
+  await page.goto("https://progress.appacademy.io/jobberwocky");
   for (let i = 0; i < STUDENTS.length; i++) {
     await page.click("input[placeholder]");
     await page.keyboard.type(STUDENTS[i]["name"], { delay: 100 });
+    /* delay is necessary here because of the specific way that
+     the input field works on jobberwocky: it auto-suggests names
+     as one types, if the name is typed instantly with no delay then
+     the wrong name is selected more often than not. A delay makes
+     the typing more human-like */
     await Promise.all([
       page.waitForNavigation({ waitUntil: "networkidle0" }),
       page.keyboard.press("Enter")
     ]);
     id = page.url().match(/\d+/)[0];
+    console.log(`NAME: ${STUDENTS[i]["name"]}, ID: ${id}`);
     STUDENTS[i]["id"] = id;
   }
 }
