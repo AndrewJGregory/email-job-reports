@@ -11,10 +11,10 @@ For a deeper dive into both of these technologies, check out my other more in-de
 
 ### Previous Workflow
 
-1. Search for student on our internal website
-2. Click "Details" under "Applications"
-3. Count how many jobs have been applied in the last 7 days
-4. Repeat for every student
+1.  Search for student on our internal website
+2.  Click "Details" under "Applications"
+3.  Count how many jobs have been applied in the last 7 days
+4.  Repeat for every student
 
 Using a random student as an example, this is what steps 2-3 would look like:
 
@@ -42,8 +42,8 @@ Armed with my knowledge of puppeteer and nodemailer from my [previous project](h
 
 There were two processes that I considered to compute the total amount of jobs applied to in the last week:
 
-1. Go through the above process every Monday morning with puppeteer by counting every row that is less than "7 days ago".
-2. Take advantage of the "Weekly Applied" and grab the number every Sunday night before it resets Monday at 12AM.
+1.  Go through the above process every Monday morning with puppeteer by counting every row that is less than "7 days ago".
+2.  Take advantage of the "Weekly Applied" and grab the number every Sunday night before it resets Monday at 12AM.
 
 Between both of these, #2 sounded much easier. The only drawback to it is that if a student is applying to jobs Sunday night then I might miss some of these jobs if I run the program too early. Example: I run the program at 8PM on Sunday, which grabs all the "Weekly Applied" numbers. However, if a student applies to jobs after 8PM, then these jobs would not be included in my original report, which would now be inaccurate. However, if I run the program late enough (11:30PM), then this drawback is heavily mitigated.
 
@@ -62,9 +62,7 @@ const CREDS = {
   email: { address: "agregory@appacademy.io", password: "xxx" }
 };
 
-const STUDENTS = [
-  { name: "Andrew Gregory", careerCoach: "A", id: "9999" },
-];
+const STUDENTS = [{ name: "Andrew Gregory", careerCoach: "A", id: "9999" }];
 
 module.exports = { CREDS, STUDENTS };
 ```
@@ -81,7 +79,7 @@ Then `cd` into the repo directory and run `node main.js`.
 
 ### Cool code snippet
 
-All of the career coaches have different students assigned to them. To make it easier for all of us, I decided to sort the number of jobs each of our students have applied to. In this way we can know how everybody is doing while focusing on our students in particular. Given that `STUDENTS` object, I take advantage of pass by reference to DRY up my code:
+All of the career coaches have different students assigned to them. To make it easier for all of us, I decided to sort the number of jobs each of our students have applied to. In this way we can know how everybody is doing while focusing on our own students in particular. **'a', 'j', and 'd' are all the first letters of the first name of a coach.** Given that `STUDENTS` object, I take advantage of pass by reference to DRY up my code:
 
 ```js
 const sortStudents = students => {
@@ -100,25 +98,25 @@ const sortStudents = students => {
 
 Creating a temporary array of three arrays allows me to iterate through that temporary array and use `.sort` to mutate each of those variables.
 
-Another way to do the following is as such:
+Another way to do this is as such:
 
 ```js
-STUDENTS.reduce(
-  (obj, student, idx) => {
+const coachStudents = STUDENTS.reduce(
+  (obj, student) => {
     const key = `${student["careerCoach"].toLowerCase()}Students`;
     obj[key].push(student);
-    const hasLastStudentBeenAdded = idx === STUDENTS.length - 1
-    if (hasLastStudentBeenAdded) {
-      for (let key in obj) {
-        let studentArray = obj[key];
-        studentArray.sort((s1, s2) =>
-          Math.sign(parseInt(s2["jobsApplied"]) - parseInt(s1["jobsApplied"]))
-        );
-      });
-    }
   },
   { aStudents: [], jStudents: [], dStudents: [] }
 );
+
+for (let coach in coachStudents) {
+  let studentArray = coachStudents[coach];
+  studentArray.sort((s1, s2) =>
+    Math.sign(parseInt(s2["jobsApplied"]) - parseInt(s1["jobsApplied"]))
+  );
+}
 ```
 
-I am not too fond of this second solution because while it is creative and doesn't repeat code like the first solution, I feel like it is not as readable or as intuitive to understand. This would be a better solution if there was a million career coaches, but since there are only three, the three variable declarations in the first solution is much more clear.
+This solution leverages the fact that each student has a `careerCoach` key that points to a single letter which is the first letter of the first name of the coach. This allows me to dynamically add the student to the appropriate coach's array of students. After all of the students are added to the respective coach's array, all of the arrays are sorted much like the previous example.
+
+I am not too fond of this second solution because while it is creative and doesn't repeat code like the first solution, I feel like it is not as readable or as intuitive to understand. This would be a better solution if there were a million career coaches, but since there are only three, the three variable declarations in the first solution is much more clear.
