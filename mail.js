@@ -1,17 +1,23 @@
 const nodemailer = require("nodemailer");
 const { CREDS } = require("./creds");
 
+const currentDate = new Date()
+  .toJSON()
+  .slice(0, 10)
+  .replace(/-/g, "/");
+
 const sendEmail = (students, transporter) => {
   const { jStudents, dStudents, aStudents } = sortStudents(students);
   const joeyTable = makeTable(jStudents, "Joey");
   const dannyTable = makeTable(dStudents, "Danny");
   const andrewTable = makeTable(aStudents, "Andrew");
+
   const mailOptions = {
     from: `${CREDS["email"]["address"]}`,
     to: `${
       CREDS["email"]["address"]
     }, dcatalano@appacademy.io, jfehrman@appacademy.io`,
-    subject: "Job Seeker Report",
+    subject: `Job Seeker Report for ${currentDate}`,
     html: `${joeyTable}<br></br>${dannyTable}<br></br>${andrewTable}`
   };
 
@@ -34,7 +40,7 @@ const makeTable = (students, careerCoach) => {
   return `<table style='text-align: center'>
   <thead>
   <tr>
-  <th colspan='2'>${careerCoach}'s Job Seeker Report for 7/11/2018</th>
+  <th colspan='2'>${careerCoach}'s Job Seeker Report for ${currentDate}</th>
   </tr></thead><tbody style='text-align: center'>
   <tr>
   <td>Name</td>
