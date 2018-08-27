@@ -12,40 +12,19 @@ For a deeper dive into both of these technologies, check out my other more in-de
 ### Previous Workflow
 
 1.  Search for student on our internal website
-2.  Click "Details" under "Applications"
-3.  Count how many jobs have been applied in the last 7 days
-4.  Repeat for every student
+2.  Look at the number after "Weekly Applied: "
 
-Using a random student as an example, this is what steps 2-3 would look like:
-
-After searching for the student, this is the show page that displays:
+Using a random student as an example, here is what the "Weekly Applied: " would look like on their show page:
 
 ![student show page](/images/student_show_page.png)
 
 (name and picture are omitted)
 
-Clicking on Details leads to this page:
-
-![list of jobs](/images/list_of_jobs.png)
-
-(company names are omitted)
-
-Now we count each row if the "added" was less than 7 days ago. This gives the total amount of jobs that the student has applied to in the last week.
-
-An astute reader may note that there is a "Weekly Applied" number in the first screenshot. This is the running total of jobs that the student has applied to for a given week. However, this number resets every Monday at 12:00AM. When we send out weekly check-in emails on Monday morning, then the Weekly Applied number has been reset to 0 and we have to follow the above workflow to ascertain how many jobs that the student has applied to over the last week.
+"Weekly Applied: " is the running total of jobs that the student has applied to for a given week. However, this number resets every Monday at 9AM. Due to this, the email has to be generated and sent out before Monday at 9AM. This process of searching for a student and then looking at that specific number would have to be repeated for **every** student. Doing this for 30-40 students becomes exceedingly monotonous very quickly, so automating it was the next logical step.
 
 ### General Initial Approaches
 
 Armed with my knowledge of puppeteer and nodemailer from my [previous project](https://github.com/AndrewJGregory/scrape-mba-results), I knew what technologies that I had to use from the beginning.
-
-### Thought Process
-
-There were two processes that I considered to compute the total amount of jobs applied to in the last week:
-
-1.  Go through the above process every Monday morning with puppeteer by counting every row that is less than "7 days ago".
-2.  Take advantage of the "Weekly Applied" and grab the number every Sunday night before it resets Monday at 12AM.
-
-Between both of these, #2 sounded much easier. The only drawback to it is that if a student is applying to jobs Sunday night then I might miss some of these jobs if I run the program too early. Example: I run the program at 8PM on Sunday, which grabs all the "Weekly Applied" numbers. However, if a student applies to jobs after 8PM, then these jobs would not be included in my original report, which would now be inaccurate. However, if I run the program late enough (11:30PM), then this drawback is heavily mitigated.
 
 ### Current Workflow
 
