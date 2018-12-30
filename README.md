@@ -88,10 +88,10 @@ const coachStudents = STUDENTS.reduce(
   { aStudents: [], jStudents: [], dStudents: [] }
 );
 
-for (let coach in coachStudents) {
-  let studentArray = coachStudents[coach];
+for (const coach in coachStudents) {
+  const studentArray = coachStudents[coach];
   studentArray.sort((s1, s2) =>
-    Math.sign(parseInt(s2["jobsApplied"]) - parseInt(s1["jobsApplied"]))
+    Math.sign(parseInt(s2["jobsApplied"]) - parseInt(s1["jobsApplied"])),
   );
 }
 ```
